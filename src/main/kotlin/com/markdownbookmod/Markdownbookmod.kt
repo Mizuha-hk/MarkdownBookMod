@@ -1,7 +1,8 @@
 package com.markdownbookmod
 
-import com.markdownbookmod.block.ModBlocks
+import com.markdownbookmod.item.ModItems
 import net.minecraft.client.Minecraft
+import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.fml.common.Mod
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.neoforge.forge.runForDist
+import java.util.*
 
 /**
  * Main mod class.
@@ -30,8 +32,7 @@ object Markdownbookmod {
     init {
         LOGGER.log(Level.INFO, "Hello world!")
 
-        // Register the KDeferredRegister to the mod-specific event bus
-        ModBlocks.REGISTRY.register(MOD_BUS)
+        ModItems.ITEMS.register(MOD_BUS)
 
         val obj = runForDist(clientTarget = {
             MOD_BUS.addListener(::onClientSetup)
@@ -63,5 +64,9 @@ object Markdownbookmod {
     @SubscribeEvent
     fun onCommonSetup(event: FMLCommonSetupEvent) {
         LOGGER.log(Level.INFO, "Hello! This is working!")
+    }
+
+    fun prefix(name: String): ResourceLocation {
+        return ResourceLocation.fromNamespaceAndPath(ID, name.lowercase(Locale.ROOT))
     }
 }
