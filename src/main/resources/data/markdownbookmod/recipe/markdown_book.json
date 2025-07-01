@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:feather",
+    "minecraft:ink_sac",
+    "minecraft:gold_nugget"
+  ],
+  "result": {
+      "count": 1,
+      "id": "markdownbookmod:markdown_book"
+  }
+}

@@ -9,17 +9,13 @@ import net.neoforged.neoforge.registries.DeferredRegister
 import java.util.function.Supplier
 
 object ModItems {
-    val ITEMS = DeferredRegister.createItems(Markdownbookmod.ID);
+    val ITEMS = DeferredRegister.createItems(Markdownbookmod.ID)
 
-    val MARKDOWNBOOK = register("markdown_book", { properties ->
-        MarkdownBook(properties);
-    }, { ->
-        Item.Properties();
-    });
+    val MARKDOWNBOOK = register("markdown_book", { properties -> MarkdownBook(properties) }, { Item.Properties().stacksTo(1) })
 
-    fun <T: Item> register(name: String, item: (Item.Properties) -> T, properties: Supplier<Item.Properties>): DeferredItem<T> {
+    private fun <T: Item> register(name: String, item: (Item.Properties) -> T, properties: Supplier<Item.Properties>): DeferredItem<T> {
         return ITEMS.register(name) { ->
-            item(properties.get().setId(ResourceKey.create(Registries.ITEM, Markdownbookmod.prefix(name))));
+            item(properties.get().setId(ResourceKey.create(Registries.ITEM, Markdownbookmod.prefix(name))))
         }
     }
 }

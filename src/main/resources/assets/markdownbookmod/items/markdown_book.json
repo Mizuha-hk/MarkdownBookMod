@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "markdownbookmod:item/markdown_book"
+  }
+}

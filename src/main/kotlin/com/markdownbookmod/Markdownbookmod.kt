@@ -1,5 +1,6 @@
 package com.markdownbookmod
 
+import com.markdownbookmod.block.ModBlocks
 import com.markdownbookmod.item.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.ResourceLocation
@@ -30,8 +31,9 @@ object Markdownbookmod {
     val LOGGER: Logger = LogManager.getLogger(ID)
 
     init {
-        LOGGER.log(Level.INFO, "Hello world!")
+        LOGGER.log(Level.INFO, "MarkdownBookMod is loading...")
 
+        ModBlocks.BLOCKS.register(MOD_BUS)
         ModItems.ITEMS.register(MOD_BUS)
 
         val obj = runForDist(clientTarget = {
