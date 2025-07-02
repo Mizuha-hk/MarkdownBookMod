@@ -3,6 +3,7 @@
   "block.markdownbookmod.example_block": "Example Block",
   "item.markdownbookmod.example_item": "Example Item",
   "item.markdownbookmod.markdown_book": "Markdown Book",
+  "item.markdownbookmod.markdown_book.tooltip": "Right-click to edit",
   "gui.markdownbookmod.markdown_book": "Markdown Book Editor",
   "gui.markdownbookmod.title": "Title",
   "gui.markdownbookmod.content": "Content",

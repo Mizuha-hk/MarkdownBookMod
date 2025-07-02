@@ -49,7 +49,6 @@ class MarkdownBookScreen(private val itemStack: ItemStack) : Screen(Component.tr
             80,
             300,
             height - 150,
-            Component.translatable("gui.markdownbookmod.content"),
             Component.translatable("gui.markdownbookmod.content")
         )
         contentEditBox.setValue(originalContent)

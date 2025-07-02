@@ -22,32 +22,52 @@ class MarkdownBook(properties: Properties) : Item(properties) {
         const val TAG_CONTENT = "content"
         
         fun getTitle(stack: ItemStack): String {
-            val customData = stack.get(DataComponents.CUSTOM_DATA)
-            return customData?.copyTag()?.getString(TAG_TITLE) ?: ""
+            return try {
+                val customData = stack.get(DataComponents.CUSTOM_DATA)
+                customData?.copyTag()?.getString(TAG_TITLE) ?: ""
+            } catch (e: Exception) {
+                ""
+            }
         }
         
         fun getContent(stack: ItemStack): String {
-            val customData = stack.get(DataComponents.CUSTOM_DATA)
-            return customData?.copyTag()?.getString(TAG_CONTENT) ?: ""
+            return try {
+                val customData = stack.get(DataComponents.CUSTOM_DATA)
+                customData?.copyTag()?.getString(TAG_CONTENT) ?: ""
+            } catch (e: Exception) {
+                ""
+            }
         }
         
         fun setTitle(stack: ItemStack, title: String) {
-            val nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
-            nbt.putString(TAG_TITLE, title)
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
+            try {
+                val nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
+                nbt.putString(TAG_TITLE, title.take(100)) // Limit title length
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
+            } catch (e: Exception) {
+                // Silently fail if NBT operation fails
+            }
         }
         
         fun setContent(stack: ItemStack, content: String) {
-            val nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
-            nbt.putString(TAG_CONTENT, content)
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
+            try {
+                val nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
+                nbt.putString(TAG_CONTENT, content.take(32767)) // Limit content length
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
+            } catch (e: Exception) {
+                // Silently fail if NBT operation fails
+            }
         }
         
         fun setTitleAndContent(stack: ItemStack, title: String, content: String) {
-            val nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
-            nbt.putString(TAG_TITLE, title)
-            nbt.putString(TAG_CONTENT, content)
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
+            try {
+                val nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
+                nbt.putString(TAG_TITLE, title.take(100)) // Limit title length
+                nbt.putString(TAG_CONTENT, content.take(32767)) // Limit content length
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
+            } catch (e: Exception) {
+                // Silently fail if NBT operation fails
+            }
         }
     }
     
@@ -73,5 +93,29 @@ class MarkdownBook(properties: Properties) : Item(properties) {
         } else {
             super.getName(stack)
         }
+    }
+    
+    override fun appendHoverText(stack: ItemStack, context: Item.TooltipContext, tooltipComponents: MutableList<Component>, tooltipFlag: net.minecraft.world.item.TooltipFlag) {
+        val title = getTitle(stack)
+        val content = getContent(stack)
+        
+        if (title.isNotEmpty()) {
+            tooltipComponents.add(Component.literal("Title: $title").withStyle { it.withColor(0x55FF55) })
+        }
+        
+        if (content.isNotEmpty()) {
+            val preview = if (content.length > 50) {
+                content.take(50) + "..."
+            } else {
+                content
+            }
+            tooltipComponents.add(Component.literal(preview).withStyle { it.withColor(0xAAAAAA) })
+        }
+        
+        if (title.isEmpty() && content.isEmpty()) {
+            tooltipComponents.add(Component.translatable("item.markdownbookmod.markdown_book.tooltip").withStyle { it.withColor(0x888888) })
+        }
+        
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag)
     }
 }
