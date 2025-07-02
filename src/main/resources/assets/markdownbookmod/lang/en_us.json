@@ -1,5 +1,11 @@
 {
   "itemGroup.markdownbookmod": "Example Mod Tab",
   "block.markdownbookmod.example_block": "Example Block",
-  "item.markdownbookmod.example_item": "Example Item"
+  "item.markdownbookmod.example_item": "Example Item",
+  "item.markdownbookmod.markdown_book": "Markdown Book",
+  "gui.markdownbookmod.markdown_book": "Markdown Book Editor",
+  "gui.markdownbookmod.title": "Title",
+  "gui.markdownbookmod.content": "Content",
+  "gui.markdownbookmod.save": "Save",
+  "gui.markdownbookmod.cancel": "Cancel"
 }
