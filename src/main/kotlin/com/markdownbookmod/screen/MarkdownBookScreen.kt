@@ -2,17 +2,20 @@ package com.markdownbookmod.screen
 
 import com.markdownbookmod.Markdownbookmod
 import com.markdownbookmod.item.MarkdownBook
+import com.markdownbookmod.network.UpdateMarkdownBookPayload
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.MultiLineEditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
+import net.neoforged.neoforge.network.PacketDistributor
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-class MarkdownBookScreen(private val itemStack: ItemStack): Screen(Component.translatable("string.markdown_book.title")) {
+class MarkdownBookScreen(private val itemStack: ItemStack, private val hand: InteractionHand): Screen(Component.translatable("string.markdown_book.title")) {
     private lateinit var titleEditBox: EditBox
     private lateinit var contentEditBox: MultiLineEditBox
     private lateinit var saveButton: Button
@@ -84,7 +87,11 @@ class MarkdownBookScreen(private val itemStack: ItemStack): Screen(Component.tra
 
     private fun saveAndClose() {
         LOGGER.info("Saving Markdown Book with Title: ${titleEditBox.value} and Content: ${contentEditBox.value}")
-        markdownBook.setTitleAndContents(itemStack, titleEditBox.value, contentEditBox.value)
+        
+        // Send packet to server to update the ItemStack
+        val packet = UpdateMarkdownBookPayload(hand, titleEditBox.value, contentEditBox.value)
+        PacketDistributor.sendToServer(packet)
+        
         onClose()
     }
 
