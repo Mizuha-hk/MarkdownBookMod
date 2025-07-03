@@ -26,16 +26,16 @@ class MarkdownBook(properties: Properties) : Item(properties) {
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
         val itemStack: ItemStack = player.getItemInHand(hand)
         if (level.isClientSide) {
-            openMarkdownBookScreen(itemStack)
+            openMarkdownBookScreen(itemStack, hand)
         }
 
         return InteractionResult.SUCCESS
     }
 
     @OnlyIn(Dist.CLIENT)
-    private fun openMarkdownBookScreen(itemStack: ItemStack){
+    private fun openMarkdownBookScreen(itemStack: ItemStack, hand: InteractionHand){
         val minecraft = Minecraft.getInstance()
-        minecraft.setScreen(MarkdownBookScreen(itemStack))
+        minecraft.setScreen(MarkdownBookScreen(itemStack, hand))
     }
 
     override fun appendHoverText(

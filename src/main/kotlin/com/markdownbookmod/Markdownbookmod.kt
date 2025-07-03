@@ -2,6 +2,7 @@ package com.markdownbookmod
 
 import com.markdownbookmod.block.ModBlocks
 import com.markdownbookmod.item.ModItems
+import com.markdownbookmod.network.ModNetworking
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.SubscribeEvent
@@ -10,6 +11,7 @@ import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -35,6 +37,9 @@ object Markdownbookmod {
 
         ModBlocks.BLOCKS.register(MOD_BUS)
         ModItems.ITEMS.register(MOD_BUS)
+        
+        // Register network handlers
+        MOD_BUS.addListener(::registerPayloads)
 
         val obj = runForDist(clientTarget = {
             MOD_BUS.addListener(::onClientSetup)
@@ -66,6 +71,10 @@ object Markdownbookmod {
     @SubscribeEvent
     fun onCommonSetup(event: FMLCommonSetupEvent) {
         LOGGER.log(Level.INFO, "Hello! This is working!")
+    }
+    
+    private fun registerPayloads(event: RegisterPayloadHandlersEvent) {
+        ModNetworking.register(event)
     }
 
     fun prefix(name: String): ResourceLocation {
