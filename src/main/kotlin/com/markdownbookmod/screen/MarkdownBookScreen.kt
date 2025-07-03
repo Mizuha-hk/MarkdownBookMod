@@ -89,7 +89,8 @@ class MarkdownBookScreen(private val itemStack: ItemStack, private val hand: Int
         LOGGER.info("Saving Markdown Book with Title: ${titleEditBox.value} and Content: ${contentEditBox.value}")
         
         // Send packet to server to update the ItemStack
-        val packet = UpdateMarkdownBookPayload(hand, titleEditBox.value, contentEditBox.value)
+        val handIndex = InteractionHand.entries.indexOf(hand)
+        val packet = UpdateMarkdownBookPayload(handIndex, titleEditBox.value, contentEditBox.value)
         PacketDistributor.sendToServer(packet)
         
         onClose()
