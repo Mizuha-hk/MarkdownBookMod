@@ -16,6 +16,13 @@ class MarkdownProcessor {
     }
     
     /**
+     * Parse markdown text and convert to Minecraft formatted text
+     */
+    fun parseToMinecraftText(markdown: String): String {
+        return parse(markdown).accept(MinecraftComponentRenderer())
+    }
+    
+    /**
      * Parse markdown text to AST
      */
     fun parse(markdown: String): Document {

@@ -135,6 +135,8 @@ class MarkdownParser(private val tokens: List<Token>) {
     }
     
     private fun parseInlineElement(): MarkdownNode? {
+        if (isAtEnd()) return null
+        
         return when (current().type) {
             TokenType.BOLD -> parseBold()
             TokenType.ITALIC -> parseItalic()
@@ -146,7 +148,7 @@ class MarkdownParser(private val tokens: List<Token>) {
                 Text(space)
             }
             else -> {
-                advance()
+                advance() // Skip unknown token
                 null
             }
         }
@@ -156,11 +158,12 @@ class MarkdownParser(private val tokens: List<Token>) {
         advance() // Skip opening **
         val content = mutableListOf<MarkdownNode>()
         
-        while (!isAtEnd() && current().type != TokenType.BOLD) {
+        while (!isAtEnd() && current().type != TokenType.BOLD && current().type != TokenType.EOF) {
             val inline = parseInlineElement()
             if (inline != null) {
                 content.add(inline)
             }
+            if (position >= tokens.size) break // Safety check
         }
         
         if (!isAtEnd() && current().type == TokenType.BOLD) {
@@ -174,11 +177,12 @@ class MarkdownParser(private val tokens: List<Token>) {
         advance() // Skip opening *
         val content = mutableListOf<MarkdownNode>()
         
-        while (!isAtEnd() && current().type != TokenType.ITALIC) {
+        while (!isAtEnd() && current().type != TokenType.ITALIC && current().type != TokenType.EOF) {
             val inline = parseInlineElement()
             if (inline != null) {
                 content.add(inline)
             }
+            if (position >= tokens.size) break // Safety check
         }
         
         if (!isAtEnd() && current().type == TokenType.ITALIC) {
@@ -192,11 +196,12 @@ class MarkdownParser(private val tokens: List<Token>) {
         advance() // Skip opening ~~
         val content = mutableListOf<MarkdownNode>()
         
-        while (!isAtEnd() && current().type != TokenType.STRIKETHROUGH) {
+        while (!isAtEnd() && current().type != TokenType.STRIKETHROUGH && current().type != TokenType.EOF) {
             val inline = parseInlineElement()
             if (inline != null) {
                 content.add(inline)
             }
+            if (position >= tokens.size) break // Safety check
         }
         
         if (!isAtEnd() && current().type == TokenType.STRIKETHROUGH) {
@@ -239,6 +244,6 @@ class MarkdownParser(private val tokens: List<Token>) {
     }
     
     private fun isAtEnd(): Boolean {
-        return position >= tokens.size || current().type == TokenType.EOF
+        return position >= tokens.size
     }
 }
