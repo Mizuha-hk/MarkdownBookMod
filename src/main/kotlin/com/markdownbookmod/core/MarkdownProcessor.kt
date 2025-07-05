@@ -7,23 +7,15 @@ import com.markdownbookmod.core.models.Document
  * Main facade for markdown processing
  */
 class MarkdownProcessor {
-    
     /**
-     * Parse markdown text and convert to HTML
-     */
-    fun parseToHtml(markdown: String): String {
-        return parse(markdown).accept(HtmlRenderer())
-    }
-    
-    /**
-     * Parse markdown text and convert to Minecraft formatted text
+     * Parse Markdown text and convert to Minecraft formatted text
      */
     fun parseToMinecraftText(markdown: String): String {
         return parse(markdown).accept(MinecraftComponentRenderer())
     }
     
     /**
-     * Parse markdown text to AST
+     * Parse Markdown text to AST
      */
     fun parse(markdown: String): Document {
         return try {
@@ -35,12 +27,5 @@ class MarkdownProcessor {
             // On error, treat as plain text
             Document(listOf(com.markdownbookmod.core.models.Text(markdown)))
         }
-    }
-    
-    /**
-     * Parse markdown text and render with custom visitor
-     */
-    fun parseAndRender(markdown: String, visitor: MarkdownVisitor): String {
-        return parse(markdown).accept(visitor)
     }
 }
