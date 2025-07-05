@@ -3,7 +3,7 @@ package com.markdownbookmod.core
 import com.markdownbookmod.core.models.*
 
 /**
- * Parser for converting tokens to AST
+ * 構文解析器クラス
  */
 class MarkdownParser(private val tokens: List<Token>) {
     private var position = 0

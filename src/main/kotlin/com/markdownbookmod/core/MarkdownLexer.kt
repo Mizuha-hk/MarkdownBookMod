@@ -1,7 +1,7 @@
 package com.markdownbookmod.core
 
 /**
- * Lexical analyzer for markdown text
+ * 軸解析器クラス
  */
 class MarkdownLexer(private val input: String) {
     private var position = 0
